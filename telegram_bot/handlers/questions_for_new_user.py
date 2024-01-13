@@ -1,16 +1,16 @@
 from aiogram import Router, F
 from aiogram.types import Message
-from telegram_bot.Utils.Weather_data import WeatherData
-from telegram_bot.Utils.Message_creater import MessageCreator
+from Utils.Weather_data import WeatherData
+from Utils.Message_creater import MessageCreator
 from aiogram.filters.command import Command
-from telegram_bot.keyboard.offer_new_forecast_kb import offer_new_forecast_kb
-from telegram_bot.keyboard.location_kb import share_location_kb
-from telegram_bot.keyboard.day_count_kb import number_of_days_kb
-from telegram_bot.Utils.Form import Form, Userdata
+from keyboard.offer_new_forecast_kb import offer_new_forecast_kb
+from keyboard.location_kb import share_location_kb
+from keyboard.day_count_kb import number_of_days_kb
+from Utils.Form import Form, Userdata
 from aiogram.utils.markdown import hbold
 from aiogram.fsm.context import FSMContext
 import os
-from telegram_bot.Utils.database import Database
+from Utils.database import Database
 router = Router()
 
 

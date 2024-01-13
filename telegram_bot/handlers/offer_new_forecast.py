@@ -1,11 +1,11 @@
 import os
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
-from telegram_bot.Utils.database import Database
-from telegram_bot.Utils.Weather_data import WeatherData
-from telegram_bot.Utils.Message_creater import MessageCreator
-from telegram_bot.keyboard.offer_new_forecast_kb import offer_new_forecast_kb
-from telegram_bot.Utils.Form import Form
+from Utils.database import Database
+from Utils.Weather_data import WeatherData
+from Utils.Message_creater import MessageCreator
+from keyboard.offer_new_forecast_kb import offer_new_forecast_kb
+from Utils.Form import Form
 router = Router()
 
 

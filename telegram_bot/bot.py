@@ -11,7 +11,7 @@ from handlers.questions_for_new_user import router as questions_router
 from handlers.offer_new_forecast import router as offer_router
 from handlers.commandStart import router as start_router
 from handlers.forecast_for_registered_user import router as registered_user_router
-from telegram_bot.Utils.commands import set_commands
+from Utils.commands import set_commands
 
 
 load_dotenv()

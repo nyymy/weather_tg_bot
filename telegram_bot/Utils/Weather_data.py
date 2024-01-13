@@ -3,7 +3,7 @@ import requests_cache
 import pandas as pd
 from datetime import datetime
 from retry_requests import retry
-from telegram_bot.Utils.get_local_time import get_local_time, get_timezone_difference
+from Utils.get_local_time import get_local_time, get_timezone_difference
 
 
 class WeatherData:

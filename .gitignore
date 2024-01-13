@@ -1,6 +1,8 @@
 telegram_bot/tg_bot_db.db
 .idea
 telegram_bot/.cache.sqlite
+tg_bot_db.db
+.cache.sqlite
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

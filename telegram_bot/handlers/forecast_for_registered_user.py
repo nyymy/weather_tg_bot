@@ -3,12 +3,12 @@ import os
 from aiogram import Router, F
 from aiogram.types import Message
 
-from telegram_bot.Utils.database import Database
-from telegram_bot.Utils.Weather_data import WeatherData
-from telegram_bot.Utils.Message_creater import MessageCreator
-from telegram_bot.keyboard.day_count_kb import number_of_days_kb
-from telegram_bot.keyboard.offer_new_forecast_kb import offer_new_forecast_kb
-from telegram_bot.keyboard.location_kb import share_location_kb
+from Utils.database import Database
+from Utils.Weather_data import WeatherData
+from Utils.Message_creater import MessageCreator
+from keyboard.day_count_kb import number_of_days_kb
+from keyboard.offer_new_forecast_kb import offer_new_forecast_kb
+from keyboard.location_kb import share_location_kb
 
 router = Router()
 

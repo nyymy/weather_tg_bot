@@ -3,7 +3,7 @@ import requests_cache
 from .WindDirectoinReform import degrees_to_compass
 from .cloud_percentage_to_emoji import cloud_percentage_to_emoji
 from .swap_digits_with_emojis import swap_digits_with_emojis
-from telegram_bot.Utils.get_local_time import get_local_time
+from Utils.get_local_time import get_local_time
 
 
 class MessageCreator:
