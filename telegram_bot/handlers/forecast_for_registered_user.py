@@ -10,6 +10,10 @@ from keyboard.day_count_kb import number_of_days_kb
 from keyboard.offer_new_forecast_kb import offer_new_forecast_kb
 from keyboard.location_kb import share_location_kb
 
+from PIL import Image
+from aiogram.types import FSInputFile
+
+
 router = Router()
 
 
@@ -46,4 +50,7 @@ async def give_forecast(message: Message):
     weather_data = WeatherData(lat=lat, lon=lon, days=days)
     dataframe_rounded = weather_data.get_forecast()
     forecast = MessageCreator(dataframe_rounded, lat=lat, lon=lon, days=days)
-    await message.answer(f" here is\n{forecast.create_message()}", reply_markup=offer_new_forecast_kb(days))
+    forecast.create_graphic()
+    image = FSInputFile("Utils/graph.png")
+    await message.answer(f"{forecast.create_message()}", reply_markup=offer_new_forecast_kb(days))
+    await message.answer_photo(photo=image)

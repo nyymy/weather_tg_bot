@@ -5,7 +5,7 @@ import openmeteo_requests
 import requests_cache
 import seaborn as sns
 from Utils.get_local_time import get_local_time
-
+from io import BytesIO
 from .WindDirectoinReform import degrees_to_compass
 from .cloud_percentage_to_emoji import cloud_percentage_to_emoji
 from .swap_digits_with_emojis import swap_digits_with_emojis
@@ -93,7 +93,7 @@ class MessageCreator:
 
         return formatted_output
 
-    def create_graphic(self):
+    def create_graphic(self, save_path="Utils/graph.png"):
         df = self.__dataframe_rounded
         df['date'] = pd.to_datetime(df['date'])
 
@@ -114,7 +114,7 @@ class MessageCreator:
             plt.axvline(day_date.iloc[0], color='gray', linestyle='--', linewidth=0.5)
             plt.text(day_date.iloc[0], plt.ylim()[1] - 0.5, day_date.iloc[0].strftime('%b %d'),
                      ha='center', va='bottom', rotation=0, color='black',
-                     size=9, bbox=dict(facecolor='white', edgecolor='none', boxstyle='round4'))
+                     size=8, bbox=dict(facecolor='white', edgecolor='none', boxstyle='round4'))
 
         # Set font size for the y-axis label
         plt.ylabel('Temperature (°C)', fontsize=10)
@@ -131,5 +131,8 @@ class MessageCreator:
         # Adding a legend
         plt.legend()
 
+        # Save the plot as an image
+        plt.savefig(save_path)
+
         # Display the plot
-        plt.show()
+
