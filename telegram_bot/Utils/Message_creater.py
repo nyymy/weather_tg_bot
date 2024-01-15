@@ -1,9 +1,13 @@
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
 import openmeteo_requests
 import requests_cache
+import seaborn as sns
+from Utils.get_local_time import get_local_time
+
 from .WindDirectoinReform import degrees_to_compass
 from .cloud_percentage_to_emoji import cloud_percentage_to_emoji
 from .swap_digits_with_emojis import swap_digits_with_emojis
-from Utils.get_local_time import get_local_time
 
 
 class MessageCreator:
@@ -34,8 +38,11 @@ class MessageCreator:
     def __create_message_for_three_days(self):
 
         hourly_data_formatted = []
+        temperature_data = []
+        precipitation_probability_data = []
+        time_slots = []
         current_day = None
-
+        print(self.__dataframe_rounded.temperature_2m)
         for index, row in self.__dataframe_rounded.iterrows():
             # print(row)
             date = row['date']
@@ -59,6 +66,35 @@ class MessageCreator:
                 formatted_data = message
             hourly_data_formatted.append(formatted_data)
             formatted_output = '\n'.join(hourly_data_formatted)
+            temperature_data.append(temperature)
+            time_slots.append(date)
+
+        sns.set(style="whitegrid")
+
+        # Plotting the temperature and precipitation probability
+        plt.figure(figsize=(10, 5))
+
+        plt.plot(time_slots, temperature_data, marker='o', linestyle='-', color='b', label='Temperature')
+
+
+        plt.title('Forecast for 3 days')
+        plt.xlabel('')  # Empty string to remove x-axis label
+        plt.ylabel('Temperature (°C)')
+        plt.legend()
+
+        # Format x-axis as time with a custom format and rotate labels vertically
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+        plt.gca().xaxis.set_major_locator(mdates.HourLocator(interval=4))
+
+        # Set font size for x-axis labels
+        plt.xticks(fontsize=10)
+
+        # Save the plot or display it as needed
+        plt.savefig('forecast_plot.png')  # Save the plot to a file
+        plt.show()  # Display the plot
+
+        formatted_output = '\n'.join(hourly_data_formatted)
+        return formatted_output
 
         return formatted_output
 
@@ -82,5 +118,6 @@ class MessageCreator:
             formatted_data = message
             daily_data_formatted.append(formatted_data)
             formatted_output = '\n'.join(daily_data_formatted)
+
 
         return formatted_output
