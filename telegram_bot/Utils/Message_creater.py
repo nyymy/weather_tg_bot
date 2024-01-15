@@ -18,6 +18,12 @@ class MessageCreator:
         self.__days = days
         self.__dataframe_rounded = dataframe_rounded
 
+    def create_graphic(self):
+        if self.__days == 3:
+            graphic = self.__create_graphic_for_three_days()
+        elif self.__days == 10:
+            graphic = self.__create_graphic_for_ten_days()
+        return graphic
     def create_message(self):
         if self.__days == 3:
             message = self.__create_message_for_three_days()
@@ -93,7 +99,7 @@ class MessageCreator:
 
         return formatted_output
 
-    def create_graphic(self, save_path="Utils/graph.png"):
+    def __create_graphic_for_three_days(self, save_path="Utils/graph3.png"):
         df = self.__dataframe_rounded
         df['date'] = pd.to_datetime(df['date'])
 
@@ -133,6 +139,24 @@ class MessageCreator:
 
         # Save the plot as an image
         plt.savefig(save_path)
+        plt.close()
 
-        # Display the plot
+    def __create_graphic_for_ten_days(self, save_path="Utils/graph10.png"):
+        df = self.__dataframe_rounded
+        plt.figure(figsize=(10, 6))
+        plt.plot(df['date'], df['temperature_2m_max'], label='Max Temperature', marker='o', color="red")
+        plt.plot(df['date'], df['temperature_2m_min'], label='Min Temperature', marker='o', color="blue")
 
+        plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=1))
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b %d '))
+
+        plt.title('10 days forecast')
+        plt.ylabel('Temperature (°C)')
+        plt.legend()
+        plt.grid(True)
+        plt.xticks(rotation=0)
+
+        # Show the plot
+        plt.tight_layout()
+        plt.savefig(save_path)
+        plt.close()

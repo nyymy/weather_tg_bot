@@ -6,6 +6,8 @@ from Utils.Weather_data import WeatherData
 from Utils.Message_creater import MessageCreator
 from keyboard.offer_new_forecast_kb import offer_new_forecast_kb
 from Utils.Form import Form
+from aiogram.types import FSInputFile
+
 router = Router()
 
 
@@ -18,8 +20,10 @@ async def offer_new_forecast(message: Message):
     weather_data = WeatherData(lat=lat, lon=lon, days=days)
     dataframe_rounded = weather_data.get_forecast()
     forecast = MessageCreator(dataframe_rounded, lat=lat, lon=lon, days=days)
+    forecast.create_graphic()
+    image = FSInputFile(f"Utils/graph{days}.png")
     await message.answer(f"{forecast.create_message()}", reply_markup=offer_new_forecast_kb(days))
-
+    await message.answer_photo(photo=image)
 
 @router.message(F.text.startswith("Current"))
 async def give_todays_weather(message: Message):
