@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import openmeteo_requests
 import requests_cache
-import seaborn as sns
 from Utils.get_local_time import get_local_time
 from io import BytesIO
 from .WindDirectoinReform import degrees_to_compass
