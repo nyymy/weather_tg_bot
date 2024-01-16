@@ -1,5 +1,6 @@
 telegram_bot/tg_bot_db.db
 .idea
+main.py
 telegram_bot/test.py
 telegram_bot/.cache.sqlite
 tg_bot_db.db
