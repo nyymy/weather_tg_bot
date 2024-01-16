@@ -1,17 +1,15 @@
+import os
 from aiogram import Router, F
 from aiogram.types import Message
-from Utils.Weather_data import WeatherData
-from Utils.Message_creater import MessageCreator
 from aiogram.filters.command import Command
+from aiogram.fsm.context import FSMContext
+from aiogram.utils.markdown import hbold
 from keyboard.offer_new_forecast_kb import offer_new_forecast_kb
 from keyboard.location_kb import share_location_kb
 from keyboard.day_count_kb import number_of_days_kb
-from Utils.Form import Form, Userdata
-from aiogram.utils.markdown import hbold
-from aiogram.fsm.context import FSMContext
-import os
 from Utils.database import Database
-from aiogram.types import FSInputFile
+from Utils.Message_builder import MessageBuilder
+from Utils.Form import Form, Userdata
 
 router = Router()
 
@@ -53,13 +51,12 @@ async def three_days_forecast(message: Message, state: FSMContext):
     users = db.select_user_id(message.from_user.id)
     if not users:
         db.add_user(message.from_user.first_name, userdata.lat, userdata.lon, message.from_user.id)
-    weather_data = WeatherData(lat=userdata.lat, lon=userdata.lon, days=userdata.days)
-    dataframe_rounded = weather_data.get_forecast()
-    forecast = MessageCreator(dataframe_rounded, lat=userdata.lat, lon=userdata.lon, days=userdata.days)
-    forecast.create_graphic()
-    image = FSInputFile(f"Utils/graph{userdata.days}.png")
-    await message.answer(f"{forecast.create_message()}", reply_markup=offer_new_forecast_kb(userdata.days))
+    message_builder = MessageBuilder(lat=userdata.lat, lon=userdata.lon, days=userdata.days)
+    text_message = message_builder.message_text
+    image = message_builder.image
+    await message.answer(f"{text_message}", reply_markup=offer_new_forecast_kb(userdata.days))
     await message.answer_photo(photo=image)
+
 
 @router.message(Form.days)
 async def ten_days_forecast(message: Message, state: FSMContext):

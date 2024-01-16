@@ -1,17 +1,13 @@
 import os
-
 from aiogram import Router, F
 from aiogram.types import Message
-
+from Utils.Message_builder import MessageBuilder
 from Utils.database import Database
-from Utils.Weather_data import WeatherData
-from Utils.Message_creater import MessageCreator
 from keyboard.day_count_kb import number_of_days_kb
 from keyboard.offer_new_forecast_kb import offer_new_forecast_kb
 from keyboard.location_kb import share_location_kb
 
 from aiogram.types import FSInputFile
-
 
 router = Router()
 
@@ -46,10 +42,8 @@ async def give_forecast(message: Message):
     lat = db.select_user_lat(message.from_user.id)[0]
     lon = db.select_user_lon(message.from_user.id)[0]
     days = int(message.text)
-    weather_data = WeatherData(lat=lat, lon=lon, days=days)
-    dataframe_rounded = weather_data.get_forecast()
-    forecast = MessageCreator(dataframe_rounded, lat=lat, lon=lon, days=days)
-    forecast.create_graphic()
-    image = FSInputFile(f"Utils/graph{days}.png")
-    await message.answer(f"{forecast.create_message()}", reply_markup=offer_new_forecast_kb(days))
+    message_builder = MessageBuilder(lat=lat, lon=lon, days=days)
+    text_message = message_builder.message_text
+    image = message_builder.image
+    await message.answer(f"{text_message}", reply_markup=offer_new_forecast_kb(days))
     await message.answer_photo(photo=image)
