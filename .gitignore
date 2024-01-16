@@ -1,4 +1,5 @@
 telegram_bot/tg_bot_db.db
+get-pip.py
 .idea
 main.py
 telegram_bot/test.py

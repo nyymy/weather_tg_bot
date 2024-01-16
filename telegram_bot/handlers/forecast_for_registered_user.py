@@ -43,7 +43,7 @@ async def give_forecast(message: Message):
     lon = db.select_user_lon(message.from_user.id)[0]
     days = int(message.text)
     message_builder = MessageBuilder(lat=lat, lon=lon, days=days)
-    text_message = message_builder.message_text
-    image = message_builder.image
+    text_message = message_builder.create_message_text()
+    image = message_builder.image_creator()
     await message.answer(f"{text_message}", reply_markup=offer_new_forecast_kb(days))
     await message.answer_photo(photo=image)

@@ -12,22 +12,22 @@ class WeatherData:
         self.__lon = lon
         self.__days = days
         self.__timezone_difference = self.__timezone_difference()
-        self.__response = self.__get_response()
 
     def get_forecast(self):
+        response = self.get_response()
         if self.__days == 3:
-            forecast_kk = self.__forecast_for_three_days()
+            forecast_kk = self.__forecast_for_three_days(response)
         elif self.__days == 10:
-            forecast_kk = self.__forecast_for_ten_days()
+            forecast_kk = self.__forecast_for_ten_days(response)
         elif self.__days == 1:
-            forecast_kk = self.__forecast_current()
+            forecast_kk = self.__forecast_current(response)
         return forecast_kk
 
     def __timezone_difference(self):
         timezone_difference = get_timezone_difference(self.__lat, self.__lon)
         return timezone_difference
 
-    def __get_response(self):
+    def get_response(self):
         cache_session = requests_cache.CachedSession('.cache', expire_after=3600)
         retry_session = retry(cache_session, retries=5, backoff_factor=0.2)
         openmeteo = openmeteo_requests.Client(session=retry_session)
@@ -56,13 +56,13 @@ class WeatherData:
 
         # Process first location. Add a for-loop for multiple locations or weather models
 
-    def __forecast_current(self):
+    def __forecast_current(self, response):
         local_time = get_local_time(self.__lat, self.__lon)
         if not local_time:
             print("Не удалось определить часовой пояс для указанных координат.")
             return
 
-        current = self.__response.Current()
+        current = response.Current()
         current_temperature_2m = current.Variables(0).Value()
         current_cloud_cover = current.Variables(1).Value()
         current_wind_speed_10m = current.Variables(2).Value()
@@ -75,7 +75,7 @@ class WeatherData:
         }
         return current_weather_dict
 
-    def __forecast_for_three_days(self):
+    def __forecast_for_three_days(self, response):
 
         # Process hourly data. The order of variables needs to be the same as requested.
         local_time = get_local_time(self.__lat, self.__lon)
@@ -87,7 +87,7 @@ class WeatherData:
         current_hour = local_time.split(" ")[1].split(":")[0]
         # print(f"current_hour: {current_hour}")
 
-        hourly = self.__response.Hourly()
+        hourly = response.Hourly()
         hourly_temperature_2m = hourly.Variables(0).ValuesAsNumpy()
         hourly_precipitation_probability = hourly.Variables(1).ValuesAsNumpy()
         hourly_cloud_cover = hourly.Variables(2).ValuesAsNumpy()
@@ -109,9 +109,9 @@ class WeatherData:
         hourly_dataframe_rounded = hourly_dataframe.map(lambda x: round(x, 0) if isinstance(x, (float, int)) else x)
         return hourly_dataframe_rounded[int(current_hour) + 24 + self.__timezone_difference::4]
 
-    def __forecast_for_ten_days(self):
+    def __forecast_for_ten_days(self, response):
         # Process daily data. The order of variables needs to be the same as requested.
-        daily = self.__response.Daily()
+        daily = response.Daily()
         daily_temperature_2m_max = daily.Variables(0).ValuesAsNumpy()
         daily_temperature_2m_min = daily.Variables(1).ValuesAsNumpy()
         daily_precipitation_probability_max = daily.Variables(2).ValuesAsNumpy()

@@ -52,8 +52,8 @@ async def three_days_forecast(message: Message, state: FSMContext):
     if not users:
         db.add_user(message.from_user.first_name, userdata.lat, userdata.lon, message.from_user.id)
     message_builder = MessageBuilder(lat=userdata.lat, lon=userdata.lon, days=userdata.days)
-    text_message = message_builder.message_text
-    image = message_builder.image
+    text_message = message_builder.create_message_text()
+    image = message_builder.image_creator()
     await message.answer(f"{text_message}", reply_markup=offer_new_forecast_kb(userdata.days))
     await message.answer_photo(photo=image)
 
