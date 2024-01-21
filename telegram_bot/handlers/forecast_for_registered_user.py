@@ -44,6 +44,6 @@ async def give_forecast(message: Message):
     days = int(message.text)
     message_builder = MessageBuilder(lat=lat, lon=lon, days=days)
     text_message = message_builder.create_message_text()
-    image = message_builder.image_creator()
+    image = message_builder.create_image()
     await message.answer(f"{text_message}", reply_markup=offer_new_forecast_kb(days))
     await message.answer_photo(photo=image)
