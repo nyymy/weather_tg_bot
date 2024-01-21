@@ -35,10 +35,10 @@ async def handle_location(message: Message, state: FSMContext):
     await message.reply(reply, reply_markup=number_of_days_kb())
 
 
-@router.message(Form.days, F.text.casefold() == "10")
-@router.message(Form.days, F.text.casefold() == "3")
+@router.message(Form.days, F.text.casefold() == "10 days forecast")
+@router.message(Form.days, F.text.casefold() == "3 days forecast")
 async def three_days_forecast(message: Message, state: FSMContext):
-    await state.update_data(days=message.text)
+    await state.update_data(days=message.text.split(" ")[0])
     data = await state.get_data()
     await state.clear()
 

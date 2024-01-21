@@ -30,7 +30,7 @@ class GraphicCreator:
         plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
 
         # Set font size for hours and minutes using tick_params for both top and bottom
-        plt.tick_params(axis='x', which='major', labelsize=7, bottom=True, top=True)
+        plt.tick_params(axis='x', which='major', labelsize=6.5, bottom=True, top=True)
 
         plt.xticks(rotation='vertical')
 
